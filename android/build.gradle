@@ -15,6 +15,7 @@ def safeExtGet(prop, fallback) {
 }
 
 android {
+    namespace "com.csrgenerator"
     compileSdkVersion safeExtGet('compileSdkVersion', 33)
     
     defaultConfig {
