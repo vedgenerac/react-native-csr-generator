@@ -1,0 +1,4 @@
+module OpenSSLHelper {
+    header "OpenSSLHelper.h"
+    export *
+}

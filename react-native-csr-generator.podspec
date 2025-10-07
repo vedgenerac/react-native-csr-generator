@@ -14,12 +14,14 @@ Pod::Spec.new do |s|
   s.source       = { :git => "https://github.com/vedgenerac/react-native-csr-generator.git", :tag => "#{s.version}" }
 
   s.source_files = "ios/**/*.{h,m,mm,swift,c}"
+  s.module_map   = "ios/module.modulemap"
 
   s.dependency "React-Core"
   s.dependency "OpenSSL-Universal", "~> 1.1.1"
   
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
-    'SWIFT_VERSION' => '5.0'
+    'SWIFT_VERSION' => '5.0',
+    'HEADER_SEARCH_PATHS' => '$(PODS_TARGET_SRCROOT)/ios'
   }
 end
