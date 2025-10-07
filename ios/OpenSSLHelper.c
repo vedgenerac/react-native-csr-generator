@@ -36,9 +36,19 @@ X509_REQ *create_x509_request(void)
 int set_public_key(X509_REQ *req, unsigned char *pubkey, int len)
 {
     fprintf(stderr, "Setting public key, length: %d\n", len);
-    if (len != 64)
+    int adjusted_len = len;
+    unsigned char *adjusted_pubkey = pubkey;
+
+    // Handle uncompressed format: skip 0x04 prefix if present
+    if (len == 65 && pubkey[0] == 0x04)
     {
-        fprintf(stderr, "Invalid public key length: %d, expected 64\n", len);
+        adjusted_pubkey += 1;
+        adjusted_len = 64;
+        fprintf(stderr, "Adjusted public key to 64 bytes (skipped 0x04 prefix)\n");
+    }
+    else if (len != 64)
+    {
+        fprintf(stderr, "Invalid public key length: %d, expected 64 or 65 (with 0x04)\n", len);
         return 0;
     }
 
@@ -49,8 +59,8 @@ int set_public_key(X509_REQ *req, unsigned char *pubkey, int len)
         return 0;
     }
 
-    BIGNUM *x = BN_bin2bn(pubkey, 32, NULL);
-    BIGNUM *y = BN_bin2bn(pubkey + 32, 32, NULL);
+    BIGNUM *x = BN_bin2bn(adjusted_pubkey, 32, NULL);
+    BIGNUM *y = BN_bin2bn(adjusted_pubkey + 32, 32, NULL);
     if (!x || !y)
     {
         fprintf(stderr, "BN_bin2bn failed: %s\n", ERR_error_string(ERR_get_error(), NULL));
