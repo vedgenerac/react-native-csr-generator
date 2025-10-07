@@ -19,6 +19,9 @@ Pod::Spec.new do |s|
   s.dependency "React-Core"
   s.dependency "OpenSSL-Universal", "~> 1.1.1"
   
+  # Build as a framework instead of static library
+  s.static_framework = true
+  
   s.pod_target_xcconfig = {
     'DEFINES_MODULE' => 'YES',
     'SWIFT_VERSION' => '5.0',

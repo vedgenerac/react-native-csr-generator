@@ -1,6 +1,6 @@
 {
   "name": "react-native-csr-generator",
-  "version": "1.1.2",
+  "version": "1.1.3",
   "description": "React Native module for generating Certificate Signing Requests (CSR) using ECC",
   "main": "src/index.ts",
   "types": "src/index.ts",
