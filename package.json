@@ -1,0 +1,28 @@
+{
+  "name": "react-native-csr-generator",
+  "version": "1.0.0",
+  "description": "React Native module for generating Certificate Signing Requests (CSR) using ECC",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \\\"Error: no test specified\\\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vedgenerac/react-native-csr-generator.git"
+  },
+  "keywords": [
+    "react-native",
+    "csr",
+    "certificate",
+    "ecc",
+    "cryptography",
+    "android",
+    "ios"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/vedgenerac/react-native-csr-generator/issues"
+  },
+  "homepage": "https://github.com/vedgenerac/react-native-csr-generator#readme"
+}
