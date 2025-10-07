@@ -25,4 +25,9 @@ export interface CSRGeneratorInterface {
   ): Promise;
 }
 
+if (!CSRGenerator) {
+  throw new Error(
+    'CSRGenerator native module is not available. Make sure the package is properly linked.'
+  );
+}
 export default CSRGenerator as CSRGeneratorInterface;
