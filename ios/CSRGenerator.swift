@@ -6,52 +6,7 @@ import OpenSSLHelper
 class CSRGenerator: NSObject {
     
     @objc
-    static func requiresMainQueueSetup() -> Bool {
-        return false
-    }
-    
-    @objc
-    func generateECCKeyPair(_ resolve: @escaping RCTPromiseResolveBlock, rejecter reject: @escaping RCTPromiseRejectBlock) {
-        // For iOS, we generate the key pair on-demand during CSR generation
-        // CryptoKit doesn't use persistent keychain storage like Android KeyStore
-        resolve("ECC key pair will be generated during CSR creation")
-    }
-    
-    @objc
-    func generateCSR(
-        _ cn: String?,
-        userId: String?,
-        country: String?,
-        state: String?,
-        locality: String?,
-        organization: String?,
-        organizationalUnit: String?,
-        resolver resolve: @escaping RCTPromiseResolveBlock,
-        rejecter reject: @escaping RCTPromiseRejectBlock
-    ) {
-        // Prepare subject info dictionary
-        var subjectInfo: [String: Any] = [:]
-        if let cn = cn, !cn.isEmpty { subjectInfo["CN"] = cn }
-        if let userId = userId, !userId.isEmpty { subjectInfo["userId"] = userId }
-        if let country = country, !country.isEmpty { subjectInfo["country"] = country }
-        if let state = state, !state.isEmpty { subjectInfo["state"] = state }
-        if let locality = locality, !locality.isEmpty { subjectInfo["locality"] = locality }
-        if let organization = organization, !organization.isEmpty { subjectInfo["organization"] = organization }
-        if let organizationalUnit = organizationalUnit, !organizationalUnit.isEmpty { 
-            subjectInfo["organizationalUnitName"] = organizationalUnit 
-        }
-        
-        var error: NSError?
-        guard let csr = generateCSR(withSubjectInfo: subjectInfo, error: &error) else {
-            let errorMessage = error?.localizedDescription ?? "Failed to generate CSR"
-            reject("CSR_ERROR", errorMessage, error)
-            return
-        }
-        
-        resolve(csr)
-    }
-    
-    private func generateCSR(withSubjectInfo subjectInfo: [String: Any], error outError: NSErrorPointer) -> String? {
+    func generateCSR(withSubjectInfo subjectInfo: [String: Any], error outError: NSErrorPointer) -> String? {
         // Validate Common Name (CN)
         guard let commonName = subjectInfo["CN"] as? String, !commonName.isEmpty else {
             if let errorPointer = outError {
@@ -78,6 +33,10 @@ class CSRGenerator: NSObject {
             // Convert CryptoKit keys to DER format
             let privateKeyDER = privateKey.rawRepresentation
             let publicKeyDER = publicKey.rawRepresentation
+            
+            // Debug key lengths
+            print("Private key length: \(privateKeyDER.count) bytes")
+            print("Public key length: \(publicKeyDER.count) bytes")
             
             // Convert to OpenSSL EVP_PKEY
             guard let privateKeyPtr = privateKeyDER.withUnsafeBytes({ ptr in

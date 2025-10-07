@@ -1,6 +1,6 @@
-import { NativeModules } from "react-native";
+import { NativeModules, Platform } from "react-native";
 
-const { CSRGenerator } = NativeModules;
+const CSRGenerator = Platform.OS === "ios" ? NativeModules.CSRGeneratorModule : NativeModules.CSRGenerator;
 
 export interface CSRParams {
   cn?: string;
